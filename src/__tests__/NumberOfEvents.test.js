@@ -8,7 +8,7 @@ describe('<NumberOfEvents /> component', () => {
     let EventNumberTextBox;
     
     beforeEach(() => {
-        NumberOfEventsComponet = render(<NumberOfEvents />);
+        NumberOfEventsComponet = render(<NumberOfEvents setCurrentNOE={() => {}}/>);
         EventNumberTextBox = NumberOfEventsComponet.queryByRole('textbox');
     })
 
