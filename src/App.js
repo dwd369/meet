@@ -1,18 +1,39 @@
-import './App.css';
-import { useState } from 'react';
-import mockData from './mock-data';
-import EventList from './components/EventList';
 import CitySearch from './components/CitySearch';
+import EventList from './components/EventList';
 import NumberOfEvents from './components/NumberOfEvents';
 
+import { useState, useEffect } from 'react';
+import { extractLocations, getEvents } from './api';
+
+import './App.css';
 
 const App = () => {
 
+  // declare useStates
+  const [events, setEvents] = useState([]);
+  const [currentNOE, setCurrentNOE] = useState(32);
+  const [allLocations, setAllLocations] = useState([]);
+  const [currentCity, setCurrentCity] = useState("See all cities");
+
+  useEffect(() => {
+    fetchData();
+  }, [currentNOE,currentCity]);
+
+  // function to fetch data via API.js
+  const fetchData = async () => {
+    const allEvents = await getEvents();
+    const filteredEvents = currentCity === "See all cities" ?
+      allEvents :
+      allEvents.filter(event => event.location === currentCity)
+    setEvents(filteredEvents.slice(0, currentNOE));
+    setAllLocations(extractLocations(allEvents));
+  };
+
   return (
     <div className="App">
-      <CitySearch />
-      <NumberOfEvents />
-      <EventList/>
+      <CitySearch allLocations={allLocations} setCurrentCity={setCurrentCity}/>
+      <NumberOfEvents setCurrentNOE={setCurrentNOE}/>
+      <EventList events={events}/>
     </div>
   )
 }
