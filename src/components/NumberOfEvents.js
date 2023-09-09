@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-const NumberOfEvents = ( {toShow}) => {
-    const [numberOfEvents, setNumberOfEvents] = useState(32);
+const NumberOfEvents = ( { setCurrentNOE}) => {
 
     const handleInputChanged = (event) => {
-        let updatedNumber = event.target.value;
-        setNumberOfEvents(updatedNumber);
+        const value = event.target.value;
+        setCurrentNOE(value);
+
     }
 
     return(
@@ -14,12 +14,11 @@ const NumberOfEvents = ( {toShow}) => {
                 type="text"
                 className="event"
                 placeholder="Specify the number of events to display"
-                value={numberOfEvents}
+                defaultValue={32}
                 onChange={handleInputChanged}
             />
         </div>
     )
-
 };
 
 export default NumberOfEvents;
