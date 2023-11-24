@@ -1,0 +1,64 @@
+import { defineFeature, loadFeature } from "jest-cucumber";
+import App from "../App";
+import { render, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
+const feature = loadFeature('./src/features/specifyNumberOfEvents.feature');
+
+defineFeature(feature, test => {
+
+    // Scenario 1
+    test('When user hasn\'t specfied a number, 32 is the default number', ({ given, when, then }) => {
+        
+        let AppComponent;
+        let eventList;
+        given('the user hasn\'t specified or filtered the number of events', () => {
+            AppComponent = render(<App />);
+            
+        });
+
+        when('the user sees the list of events', async () => {
+            const AppDOM = AppComponent.container.firstChild;
+
+            await waitFor(() => {
+                eventList = within(AppDOM).queryAllByRole('listitem');
+                expect(eventList[0]).toBeTruthy();
+            })
+        });
+
+        then('the default number of displayed events will Business Need:', () => {
+            expect(eventList.length).toBe(32);
+        });
+    });
+
+
+    // Scenario 2
+    test('User can change the number of events they want to see.', ({ given, when, then }) => {
+        
+        let AppComponent;
+        let AppDOM;
+        given('the user has events displayed', async () => {
+            AppComponent = render(<App />);
+            AppDOM = AppComponent.container.firstChild;
+
+            await waitFor(() => {
+                const eventList = within(AppDOM).queryAllByRole('listitem');
+                expect(eventList[0]).toBeTruthy();
+            });
+
+        });
+
+        when('the user changes the number of events displayed', async () => {
+            const InputDOM = AppDOM.querySelector('#number-of-events');
+            const input = within(InputDOM).queryByRole('textbox');
+        
+            await userEvent.type(input, '{backspace}{backspace}10');
+        });
+
+        then('the number of events displayed will update to the number the user specified', () => {
+            const eventList = within(AppDOM).queryAllByRole('listitem');
+            expect(eventList.length).toEqual(10);
+        });
+    });
+
+});
