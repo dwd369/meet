@@ -73,6 +73,6 @@ describe('<App /> integration', () => {
         
         
         expect(allRenderedEventItems.length).toBe(10);
-        
+     
     })
 });
