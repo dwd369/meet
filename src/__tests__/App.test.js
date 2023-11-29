@@ -71,7 +71,6 @@ describe('<App /> integration', () => {
 
         const allEvents = await getEvents();
         
-        
         expect(allRenderedEventItems.length).toBe(10);
      
     })
