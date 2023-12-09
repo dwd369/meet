@@ -11,11 +11,29 @@ const MESSAGES_TO_IGNORE = [
     "The above error occurred"
   ];
   
-  const originalError = console.error.bind(console.error);
+const originalError = console.error.bind(console.error);
   
-  console.error = (...args) => {
-    const ignoreMessage = MESSAGES_TO_IGNORE.find(message => args.toString().includes(message));
-    if (!ignoreMessage) originalError(...args);
-  }
+console.error = (...args) => {
+  const ignoreMessage = MESSAGES_TO_IGNORE.find(message => args.toString().includes(message));
+  if (!ignoreMessage) originalError(...args);
+}
+
+const { ResizeObserver } = window;
+
+beforeEach(() => {
+  //@ts-ignore
+  delete window.ResizeObserver;
+  window.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }));
+});
+
+afterEach(() => {
+  window.ResizeObserver = ResizeObserver;
+  jest.restoreAllMocks();
+});
   
-  jest.setTimeout(30000);
+  
+jest.setTimeout(30000);
