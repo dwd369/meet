@@ -57,6 +57,7 @@ export const getEvents = async() => {
         return mockData
     }
 
+    // if offline, load and parse lastEvents from localStorage
     if (!navigator.onLine) {
         const events = localStorage.getItem("lastEvents");
         return events?JSON.parse(events):[];
@@ -71,6 +72,7 @@ export const getEvents = async() => {
         const result = await response.json();
         
         if (result) {
+            // cache events to lastEvents in localstorage
             localStorage.setItem("lastEvents", JSON.stringify(result.events));
             return result.events;
         } else return null;
