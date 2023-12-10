@@ -4,7 +4,8 @@ import {
     Pie,
     Sector,
     Cell,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Legend
 } from "recharts";
 
 const EventGenresChart = ({events}) => {
@@ -13,7 +14,8 @@ const EventGenresChart = ({events}) => {
     const [data, setData] = useState([]);
     const genres = ['React', 'JavaScript', 'Node', 'jQuery', 'Angular'];
 
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    // const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#8884d8"];
+    const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
     
     const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, percent, index }) => {
         const RADIAN = Math.PI / 180;    
@@ -29,7 +31,6 @@ const EventGenresChart = ({events}) => {
                 textAnchor={x > cx ? 'start' : 'end'}
                 dominantBaseline="central">
                 {`${genres[index]} ${(percent * 100).toFixed(0)}%`}
-                {/* {`${(percent * 100).toFixed(0)}%`} */}
             </text>
         ) : null;
     }
@@ -60,7 +61,14 @@ const EventGenresChart = ({events}) => {
                 labelLine={false}
                 label={renderCustomizedLabel}
                 outerRadius={130}
-            />
+            >
+                {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index]} />
+              ))}
+               
+            </Pie>
+
+            <Legend />
             
         {/* <Pie
             data={data}
